@@ -81,6 +81,21 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Ensure database is created and migrated
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
+    {
+        await context.Database.MigrateAsync();
+        app.Logger.LogInformation("Database migration completed successfully.");
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors("frontend");

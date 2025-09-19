@@ -30,11 +30,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      - ./backend:/src
-    command: >
-      sh -c "dotnet ef database update --project Chat.Api/Chat.Api.csproj --startup-project Chat.Api/Chat.Api.csproj || true && 
-             dotnet run --project Chat.Api/Chat.Api.csproj"
 
   frontend:
     build:
